@@ -1,9 +1,9 @@
 package org.vaadin.guice.tutorial.evaluators;
 
-import org.ilay.api.InMemoryAuthorizer;
+import org.ilay.api.Authorizer;
 import org.vaadin.guice.tutorial.domain.ItemId;
 
-public class ItemIdEvaluator implements InMemoryAuthorizer<ItemId> {
+public class ItemIdAuthorizer implements Authorizer<ItemId> {
 
     @Override
     public boolean isGranted(ItemId permission) {

@@ -8,14 +8,15 @@ import com.vaadin.ui.UI;
 import org.ilay.Authorization;
 import org.ilay.api.Authorizer;
 import org.vaadin.guice.tutorial.components.*;
-import org.vaadin.guice.tutorial.evaluators.GridItemEvaluator;
-import org.vaadin.guice.tutorial.evaluators.ItemIdEvaluator;
-import org.vaadin.guice.tutorial.evaluators.RolePermissionEvaluator;
+import org.vaadin.guice.tutorial.evaluators.GridItemAuthorizer;
+import org.vaadin.guice.tutorial.evaluators.ItemIdAuthorizer;
+import org.vaadin.guice.tutorial.evaluators.RolePermissionAuthorizer;
 import org.vaadin.guice.tutorial.grid.GridItem;
 import org.vaadin.guice.tutorial.grid.RestrictedGrid;
 import org.vaadin.guice.tutorial.views.AdminView;
 import org.vaadin.guice.tutorial.views.DefaultView;
 import org.vaadin.guice.tutorial.views.ErrorView;
+import org.vaadin.guice.tutorial.views.ItemsView;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,15 +50,11 @@ public class MyUI extends UI {
         AdminView adminView = new AdminView();
         navigator.addView("adminView", adminView);
         navigator.addView("error", new ErrorView());
+        navigator.addView("items", new ItemsView());
 
         setNavigator(navigator);
 
         setContent(rootLayout);
-
-        Authorization.restrictComponent(adminNavigationButton).to("admin");
-        Authorization.restrictView(adminView).to("admin");
-        Authorization.restrictData(GridItem.class, restrictedGrid);
-
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
@@ -68,14 +65,14 @@ public class MyUI extends UI {
         protected void servletInitialized() throws ServletException {
             super.servletInitialized();
 
-            ItemIdEvaluator itemIdEvaluator = new ItemIdEvaluator();
-            RolePermissionEvaluator rolePermissionEvaluator = new RolePermissionEvaluator();
-            GridItemEvaluator gridItemEvaluator = new GridItemEvaluator(rolePermissionEvaluator);
+            ItemIdAuthorizer itemIdAuthorizer = new ItemIdAuthorizer();
+            RolePermissionAuthorizer rolePermissionAuthorizer = new RolePermissionAuthorizer();
+            GridItemAuthorizer gridItemAuthorizer = new GridItemAuthorizer(rolePermissionAuthorizer);
 
             Set<Authorizer> authorizers = new HashSet<>();
-            authorizers.add(itemIdEvaluator);
-            authorizers.add(rolePermissionEvaluator);
-            authorizers.add(gridItemEvaluator);
+            authorizers.add(itemIdAuthorizer);
+            authorizers.add(rolePermissionAuthorizer);
+            authorizers.add(gridItemAuthorizer);
 
             Authorization.start(authorizers);
         }

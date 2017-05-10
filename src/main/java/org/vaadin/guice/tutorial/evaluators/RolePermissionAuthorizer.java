@@ -2,10 +2,10 @@ package org.vaadin.guice.tutorial.evaluators;
 
 import com.vaadin.server.VaadinSession;
 
-import org.ilay.api.InMemoryAuthorizer;
+import org.ilay.api.Authorizer;
 import org.vaadin.guice.tutorial.CurrentUserRole;
 
-public class RolePermissionEvaluator implements InMemoryAuthorizer<CurrentUserRole> {
+public class RolePermissionAuthorizer implements Authorizer<CurrentUserRole> {
 
     @Override
     public boolean isGranted(CurrentUserRole permission) {

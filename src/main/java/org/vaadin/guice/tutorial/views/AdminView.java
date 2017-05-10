@@ -14,7 +14,7 @@ public class AdminView extends VerticalLayout implements View {
 
     public AdminView() {
         addComponent(new Label("admin view"));
-        Authorization.restrictView(this).to(ADMIN).revert();
+        Authorization.restrictView(this).to(ADMIN);
     }
 
     public void enter(ViewChangeEvent event) {
